@@ -38,7 +38,7 @@ exports.newProduct = asyncErrorMW(async (req, res, next) => {
 });
 
 exports.getProducts = asyncErrorMW(async (req, res, next) => {
-  const resPerPage = 4;
+  const resPerPage = 6;
   const productsCount = await Product.countDocuments();
 
   const apiFeatures = new APIFeatures(Product.find(), req.query)
@@ -133,7 +133,8 @@ exports.deleteProduct = asyncErrorMW(async (req, res, next) => {
     );
   }
 
-  await Product.remove();
+  // await Product.deleteOne({ _id: req.params.id });
+  await product.deleteOne();
   res.status(200).json({
     success: true,
     message: "Product deleted",

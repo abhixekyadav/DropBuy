@@ -16,6 +16,10 @@ exports.registerUser = asyncErrorMW(async (req, res, next) => {
 
   const { name, email, password } = req.body;
 
+  if (!email || !password || !name) {
+    return next(new ErrorHandler("Please enter all required fields", 400));
+  }
+
   const user = await User.create({
     name,
     email,
@@ -223,7 +227,7 @@ exports.deleteUser = asyncErrorMW(async (req, res, next) => {
   const image_id = user.avatar.public_id;
   await cloudinary.v2.uploader.destroy(image_id);
 
-  await user.remove();
+  await user.deleteOne();
   res.status(200).json({
     success: true,
   });
